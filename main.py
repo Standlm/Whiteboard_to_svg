@@ -42,29 +42,42 @@ def rectify_board(image, points):
 def export_svg(paths):
     drawing = svgwrite.Drawing(
         str(OUTPUT / "drawing.svg"),
-        size=(f"{WIDTH}px", f"{HEIGHT}px"),
-        viewBox=f"0 0 {WIDTH} {HEIGHT}"
+        size=("1000", "700"),
+        viewBox=f"0 0 {WIDTH} {HEIGHT}",
+        profile="tiny"
     )
 
-    for path_points in paths:
-        if len(path_points) < 2:
+    for points in paths:
+        if len(points) < 2:
             continue
 
-        path = drawing.path(
-            d=f"M {path_points[0][0]} {path_points[0][1]}",
-            stroke="black",
-            stroke_width=2,
-            fill="none",
-            stroke_linejoin="round",
-            stroke_linecap="round"
-        )
+        # Remove repeated closing vertex
+        closed = len(points) > 2 and points[0] == points[-1]
 
-        for x, y in path_points[1:]:
-            path.push(f"L {x} {y}")
+        if closed:
+            points = points[:-1]
+
+        # Build SVG path commands
+        commands = [
+            f"M {points[0][0]} {points[0][1]}"
+        ]
+
+        for x, y in points[1:]:
+            commands.append(f"L {x} {y}")
+
+        if closed:
+            commands.append("Z")
+
+        path = drawing.path(
+            d=" ".join(commands),
+            fill="none",
+            stroke="black",
+            stroke_width=2
+        )
 
         drawing.add(path)
 
-    drawing.save()
+    drawing.save(pretty=True)
 
 def process_board(image):
     board = rectify_board(image, corners)

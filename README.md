@@ -18,7 +18,11 @@ Run main.py and click the four corners of the whiteboard starting with the top l
 ```
 python3 main.py
 ```
+## Todo nov 4th
 
+Output directly to location coordinates instead of SVG so ros2.0 can access it.
+
+Work on movement detection, goal is to capture image from whiteboard presenter
 
 ## Next steps
 
