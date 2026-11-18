@@ -62,7 +62,7 @@ def export_svg(paths):
 def process_board(image, args, rectify=True):
     OUTPUT.mkdir(exist_ok=True)
     board = rectify_board(image, corners) if rectify else cv2.resize(image, (WIDTH, HEIGHT))
-    paths = reconstruct_shapes(board)
+    paths = reconstruct_shapes(board, simplification_factor=args.simplification)
     preview = board.copy()
     for path in paths:
         points = np.array(path, dtype=np.int32)
@@ -87,6 +87,7 @@ def main():
     parser.add_argument('--lift-m', type=float, default=0.02)
     parser.add_argument('--spacing-m', type=float, default=0.002)
     parser.add_argument('--frame-id', default='drawing_plane')
+    parser.add_argument('--simplification', type=float, default=0.025, help='Polygon simplification factor')
     args = parser.parse_args()
     if args.image:
         image = cv2.imread(str(args.image))

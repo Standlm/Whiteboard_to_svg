@@ -3,7 +3,7 @@ import csv
 import json
 import math
 
-
+#spacing_m=0.002,  # spacing between waypoints in meters, can be set to 0 for no spacing to increase speed.
 def export_robot_paths(paths, output, image_size, width_m=0.3, height_m=0.21,
                        pen_z=0.0, lift_m=0.02, spacing_m=0.002,
                        frame_id='drawing_plane'):
